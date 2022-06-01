@@ -6,7 +6,7 @@
 #    By: manu <manu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 20:21:02 by manu              #+#    #+#              #
-#    Updated: 2022/06/01 13:59:42 by manu             ###   ########.fr        #
+#    Updated: 2022/06/01 20:15:26 by manu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ SERVER_OBJ			= 	$(SERVER_SRC:.c=.o)
 CLIENT_BONUS_OBJ	= 	$(CLIENT_BONUS_SRC:.c=.o)
 SERVER_BONUS_OBJ	= 	$(SERVER_BONUS_SRC:.c=.o)
 
-CFLAGS 				= 	-Wall -Wextra -Werror -g
+CFLAGS 				= 	-Wall -Wextra -Werror
 CC 					= 	gcc
 
 all: $(NAME) $(NAME_SERVER)

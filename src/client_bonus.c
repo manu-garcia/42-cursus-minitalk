@@ -6,11 +6,12 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:32:58 by manu              #+#    #+#             */
-/*   Updated: 2022/06/01 20:00:38 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/01 20:29:01 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
 #include "communication.h"
@@ -37,9 +38,16 @@ void	on_user_signal_action_received(
 		printf("Received SIGUSR2!\n");
 }
 
-int	get_server_pid(void)
+int	get_server_pid(char *argv[])
 {
-	return (62614);
+	int	server_pid;
+
+	if (!argv || !argv[1])
+		return (0);
+	server_pid = atoi(argv[1]);
+	if (!server_pid)
+		return (0);
+	return (server_pid);
 }
 
 void	setup_user_signal_handler(void)
@@ -58,12 +66,32 @@ void	send_bit(int server_pid, t_e_Bit bit)
 	kill(server_pid, bit);
 }
 
-int	main(void)
+int	validate_input_parameters(int argc, char *argv[])
+{
+	(void)argv;
+	if (argc != 3)
+		return (0);
+	return (1);
+}
+
+int	main(int argc, char *argv[])
 {	
 	int	server_pid;
 
-	server_pid = get_server_pid();
+	if (!validate_input_parameters(argc, argv))
+	{
+		printf("Parameters error. Expected usage:\n");
+		printf("client_bonus server_pid \"message\"\n");
+		exit(1);
+	}
+	server_pid = get_server_pid(argv);
+	if (!server_pid)
+	{
+		printf("Invalid server_pid.\n");
+		exit(2);
+	}
 	setup_user_signal_handler();
 	send_bit(server_pid, ONE);
+	send_bit(server_pid, ZERO);
 	return (0);
 }
