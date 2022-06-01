@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/01 19:57:27 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/01 21:22:16 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ void	on_user_signal_action_received(
 		printf("Received SIGUSR1!\n");
 	if (signum == SIGUSR2)
 		printf("Received SIGUSR2!\n");
+	kill(siginfo->si_pid, SIGNAL_ACKNOWLEDGE);
 }
 
 void	show_server_pid(void)
 {
-	printf("Server PID2: %d\n", getpid());
+	printf("Server PID: %d\n", getpid());
 }
 
 void	setup_user_signal_handler(void)

@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:32:58 by manu              #+#    #+#             */
-/*   Updated: 2022/06/01 20:29:01 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/01 21:20:26 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,15 +61,51 @@ void	setup_user_signal_handler(void)
 	sigaction(SIGUSR2, &user_signal_action, NULL);
 }
 
-void	send_bit(int server_pid, t_e_Bit bit)
+int	is_bit_set(char value, int bit_position)
 {
-	kill(server_pid, bit);
+	return ((value) & (1 << bit_position));
+}
+
+void	send_user_signal(int process_pid, t_signal signal)
+{
+	printf("Sending bit (%d)\n", signal);
+	kill(process_pid, signal);
+	printf("Waiting for acknowledge...\n");
+	pause();
+	printf("Acknowledge received.\n");
+}
+
+void	send_char(int server_pid, char c)
+{
+	int	bit_position;
+
+	bit_position = 0;
+	while (bit_position < 8)
+	{
+		if (is_bit_set(c, bit_position))
+			send_user_signal(server_pid, SIGNAL_BIT_ONE);
+		else
+			send_user_signal(server_pid, SIGNAL_BIT_ZERO);
+		bit_position++;
+	}
+}
+
+void	send_string(int server_pid, char *str)
+{
+	if (!str)
+		return ;
+	while (*str)
+	{
+		send_char(server_pid, *str);
+		str++;
+	}
 }
 
 int	validate_input_parameters(int argc, char *argv[])
 {
-	(void)argv;
 	if (argc != 3)
+		return (0);
+	if (!argv[0] || !argv[1])
 		return (0);
 	return (1);
 }
@@ -78,6 +114,7 @@ int	main(int argc, char *argv[])
 {	
 	int	server_pid;
 
+	printf("Process PID: %d\n", getpid());
 	if (!validate_input_parameters(argc, argv))
 	{
 		printf("Parameters error. Expected usage:\n");
@@ -91,7 +128,6 @@ int	main(int argc, char *argv[])
 		exit(2);
 	}
 	setup_user_signal_handler();
-	send_bit(server_pid, ONE);
-	send_bit(server_pid, ZERO);
+	send_string(server_pid, argv[2]);
 	return (0);
 }
