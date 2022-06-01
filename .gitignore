@@ -1,0 +1,6 @@
+*.o
+*.dSYM
+client_bonus
+server_bonus
+client
+server

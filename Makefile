@@ -6,7 +6,7 @@
 #    By: manu <manu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 20:21:02 by manu              #+#    #+#              #
-#    Updated: 2022/05/23 21:05:29 by manu             ###   ########.fr        #
+#    Updated: 2022/06/01 13:59:42 by manu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ NAME_BONUS			=	client_bonus
 NAME_BONUS_SERVER	=	server_bonus
 
 SRC_DIR				=	src
+INCLUDES_DIR		= 	includes
 
 CLIENT_SRC			= 	$(SRC_DIR)/client.c
 SERVER_SRC			= 	$(SRC_DIR)/server.c
@@ -27,25 +28,25 @@ SERVER_OBJ			= 	$(SERVER_SRC:.c=.o)
 CLIENT_BONUS_OBJ	= 	$(CLIENT_BONUS_SRC:.c=.o)
 SERVER_BONUS_OBJ	= 	$(SERVER_BONUS_SRC:.c=.o)
 
-CFLAGS 				= 	-Wall -Wextra -Werror
+CFLAGS 				= 	-Wall -Wextra -Werror -g
 CC 					= 	gcc
 
 all: $(NAME) $(NAME_SERVER)
 		
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) -c $(FLAGS) -o $@ $^
+	$(CC) -c $(CFLAGS) -I ${INCLUDES_DIR} -o $@ $^
 
 $(NAME): $(CLIENT_OBJ)
-	@$(CC) $(CFLAGS) $(CLIENT_OBJ) -o $(NAME)
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(CLIENT_OBJ) -o $(NAME)
 
 $(NAME_SERVER): $(SERVER_OBJ)
-	@$(CC) $(CFLAGS) $(SERVER_OBJ) -o $(NAME_SERVER)
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(SERVER_OBJ) -o $(NAME_SERVER)
 
 $(NAME_BONUS): $(CLIENT_BONUS_SRC)
-	@$(CC) $(CFLAGS) $(CLIENT_BONUS_SRC) -o $(NAME_BONUS)
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(CLIENT_BONUS_SRC) -o $(NAME_BONUS)
 
 $(NAME_BONUS_SERVER): $(SERVER_BONUS_OBJ)
-	@$(CC) $(CFLAGS) $(SERVER_BONUS_OBJ) -o $(NAME_BONUS_SERVER)
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(SERVER_BONUS_OBJ) -o $(NAME_BONUS_SERVER)
 
 bonus: $(NAME_BONUS) $(NAME_BONUS_SERVER)
 
