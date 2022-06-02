@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/02 19:32:59 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/02 19:54:46 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,27 @@
 
 typedef struct s_state {
 	char	message_char;
+	char	message[50];
+	int		message_len;
 	int		n_bits_received;
 }	t_state;
+
+static t_state	*g_state;
+
+t_state	*get_state(void)
+{
+	if (!g_state)
+	{
+		g_state = (t_state *) malloc(sizeof(t_state));
+		if (!g_state)
+		{
+			printf("Error not enough memory to allocate state.\n");
+			exit(3);
+		}
+		memset(g_state, 0, sizeof(t_state));
+	}
+	return (g_state);
+}
 
 int	send_acknowledge(int process_id)
 {
@@ -56,25 +75,26 @@ void	on_user_signal_action_received(
 	int signum, siginfo_t *siginfo, void *ucontext
 )
 {
-	static t_state	*state;
+	t_state	*state;
 
 	(void)ucontext;
+	state = get_state();
 	if (!state)
 	{
-		state = (t_state *) malloc(sizeof(t_state));
-		if (!state)
-		{
-			printf("Error not enough memory to allocate state.\n");
-			exit(3);
-		}
-		memset(state, 0, sizeof(t_state));
+		printf("\nCritical error getting comunication state. Exiting...\n");
+		exit(1);
 	}
 	if (signum == SIGNAL_BIT_ONE)
 		state->message_char = set_bit(state->message_char, state->n_bits_received);
 	state->n_bits_received++;
 	if (state->n_bits_received == 8)
 	{
-		write(1, &state->message_char, 1);
+		state->message[state->message_len] = state->message_char;
+		(state->message_len)++;
+		if (state->message_char == '\0')
+		{
+			printf("%s\n", state->message);
+		}
 		state->message_char = 0;
 		state->n_bits_received = 0;
 	}

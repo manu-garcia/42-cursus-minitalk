@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:32:58 by manu              #+#    #+#             */
-/*   Updated: 2022/06/02 19:31:35 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/02 19:44:50 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	send_string(int server_pid, char *str)
 		send_char(server_pid, *str);
 		str++;
 	}
+	send_char(server_pid, '\0');
 }
 
 int	validate_input_parameters(int argc, char *argv[])
