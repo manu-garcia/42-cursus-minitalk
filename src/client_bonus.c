@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:32:58 by manu              #+#    #+#             */
-/*   Updated: 2022/06/01 21:20:26 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/02 19:31:35 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include <errno.h>
 #include "communication.h"
 
 /*
@@ -31,11 +32,7 @@ void	on_user_signal_action_received(
 {
 	(void)siginfo;
 	(void)ucontext;
-	printf("Signal received on client (%d).!\n", signum);
-	if (signum == SIGUSR1)
-		printf("Received SIGUSR1!\n");
-	if (signum == SIGUSR2)
-		printf("Received SIGUSR2!\n");
+	// printf("Signal received on client (%d).!\n", signum);
 }
 
 int	get_server_pid(char *argv[])
@@ -56,7 +53,7 @@ void	setup_user_signal_handler(void)
 
 	user_signal_action.sa_sigaction = on_user_signal_action_received;
 	sigemptyset(&user_signal_action.sa_mask);
-	user_signal_action.sa_flags = 0;
+	user_signal_action.sa_flags = SA_SIGINFO;
 	sigaction(SIGUSR1, &user_signal_action, NULL);
 	sigaction(SIGUSR2, &user_signal_action, NULL);
 }
@@ -68,11 +65,14 @@ int	is_bit_set(char value, int bit_position)
 
 void	send_user_signal(int process_pid, t_signal signal)
 {
-	printf("Sending bit (%d)\n", signal);
-	kill(process_pid, signal);
-	printf("Waiting for acknowledge...\n");
+	if (kill(process_pid, signal) == -1)
+	{
+		printf("\nError sending signal. Errno: %d\n", errno);
+		return ;
+	}
 	pause();
-	printf("Acknowledge received.\n");
+	if (usleep(100) == -1)	// usleep works, whereas pause hangs!!
+		printf("Error sleeping.\n");
 }
 
 void	send_char(int server_pid, char c)
@@ -129,5 +129,6 @@ int	main(int argc, char *argv[])
 	}
 	setup_user_signal_handler();
 	send_string(server_pid, argv[2]);
+	printf("Message sent successfully!!!.\n");
 	return (0);
 }
