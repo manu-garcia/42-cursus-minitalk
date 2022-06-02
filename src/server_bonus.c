@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/02 19:54:46 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/02 20:30:50 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,13 @@
 #include <errno.h>
 #include "communication.h"
 
+#define MESSAGE_BUFFER_SIZE	500
+
 typedef struct s_state {
 	char	message_char;
-	char	message[50];
+	char	*message;
 	int		message_len;
+	int		message_buffer_size;
 	int		n_bits_received;
 }	t_state;
 
@@ -40,6 +43,30 @@ t_state	*get_state(void)
 		memset(g_state, 0, sizeof(t_state));
 	}
 	return (g_state);
+}
+
+void	add_message_char(t_state *state)
+{
+	char	*message_aux;
+
+	if (!state)
+		return ;
+	if (!state->message)
+	{
+		state->message_buffer_size = MESSAGE_BUFFER_SIZE;
+		state->message_len = 0;
+		state->message = (char *) malloc(state->message_buffer_size);
+	}
+	if (state->message_len >= state->message_buffer_size)
+	{
+		message_aux = state->message;
+		state->message_buffer_size += MESSAGE_BUFFER_SIZE;
+		state->message = (char *) malloc(state->message_buffer_size);
+		strncpy(state->message, message_aux, state->message_len);
+		free(message_aux);
+	}
+	state->message[state->message_len] = state->message_char;
+	state->message_len++;
 }
 
 int	send_acknowledge(int process_id)
@@ -89,11 +116,12 @@ void	on_user_signal_action_received(
 	state->n_bits_received++;
 	if (state->n_bits_received == 8)
 	{
-		state->message[state->message_len] = state->message_char;
-		(state->message_len)++;
+		add_message_char(state);
 		if (state->message_char == '\0')
 		{
 			printf("%s\n", state->message);
+			state->message[0] = '\0';
+			state->message_len = 0;
 		}
 		state->message_char = 0;
 		state->n_bits_received = 0;
@@ -131,5 +159,6 @@ int	main(void)
 	show_server_pid();
 	setup_user_signal_handler();
 	handle_signals();
+	printf("Server finished successfully.\n");
 	return (0);
 }
