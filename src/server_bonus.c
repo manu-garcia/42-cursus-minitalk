@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/02 20:30:50 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/03 19:57:11 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include "communication.h"
 
 #define MESSAGE_BUFFER_SIZE	500
+#define ERROR_MEMORY		1
+#define ERROR_INTERNAL		2
 
 typedef struct s_state {
 	char	message_char;
@@ -30,27 +32,44 @@ typedef struct s_state {
 
 static t_state	*g_state;
 
+void	exit_with_error_message(char *error_message, int exit_code)
+{
+	printf("\n%s\n", error_message);
+	exit(exit_code);
+}
+
+void	exit_with_internal_error()
+{
+	exit_with_error_message(
+		"Internal error getting comunication state",
+		ERROR_INTERNAL);
+}
+
+void	exit_with_memory_error()
+{
+	exit_with_error_message(
+		"Error not enough memory",
+		ERROR_MEMORY);
+}
+
 t_state	*get_state(void)
 {
 	if (!g_state)
 	{
 		g_state = (t_state *) malloc(sizeof(t_state));
 		if (!g_state)
-		{
-			printf("Error not enough memory to allocate state.\n");
-			exit(3);
-		}
+			exit_with_memory_error();
 		memset(g_state, 0, sizeof(t_state));
 	}
 	return (g_state);
 }
 
-void	add_message_char(t_state *state)
+void	add_char_to_message(t_state *state)
 {
 	char	*message_aux;
 
 	if (!state)
-		return ;
+		exit_with_internal_error();
 	if (!state->message)
 	{
 		state->message_buffer_size = MESSAGE_BUFFER_SIZE;
@@ -73,12 +92,12 @@ int	send_acknowledge(int process_id)
 {
 	if (!process_id)
 	{
-		printf("\nInvalid process id sending acknowledge to client.\n");
+		printf("\nInvalid process id sending acknowledge to client");
 		return (0);
 	}
 	if (kill(process_id, SIGNAL_ACKNOWLEDGE) == -1)
 	{
-		printf("\nError sending ack. Errno: %d\n", errno);
+		printf("\nError sending ack. Errno: %d", errno);
 		return (0);
 	}
 	return (1);
@@ -89,6 +108,51 @@ int	set_bit(char value, int bit_position)
 	return (value | (0x01 << bit_position));
 }
 
+void	set_bit_to_char(t_state *state, t_signal signal)
+{
+	if (!state)
+		exit_with_internal_error();
+	if (signal == SIGNAL_SET_BIT_ONE)
+		state->message_char = set_bit(
+				state->message_char,
+				state->n_bits_received);
+	state->n_bits_received++;
+}
+
+void	reset_message_char(t_state *state)
+{
+	if (!state)
+		exit_with_internal_error();
+	state->message_char = 0;
+	state->n_bits_received = 0;
+}
+
+void	reset_message(t_state *state)
+{
+	if (!state)
+		exit_with_internal_error();
+	state->message[0] = '\0';
+	state->message_len = 0;
+	reset_message_char(state);
+}
+
+int	is_char_completed(t_state *state)
+{
+	if (!state)
+		exit_with_internal_error();
+	if (state->n_bits_received == 8)
+		return (1);
+	return (0);
+}
+
+int	is_final_char(t_state *state)
+{
+	if (!state)
+		exit_with_internal_error();
+	if (state->message_char == FINAL_MESSAGE_CHAR)
+		return (1);
+	return (0);
+}
 /*
 struct sigaction {
                void     (*sa_handler)(int);
@@ -107,34 +171,27 @@ void	on_user_signal_action_received(
 	(void)ucontext;
 	state = get_state();
 	if (!state)
+		exit_with_internal_error();
+	set_bit_to_char(state, signum);
+	if (is_char_completed(state))
 	{
-		printf("\nCritical error getting comunication state. Exiting...\n");
-		exit(1);
-	}
-	if (signum == SIGNAL_BIT_ONE)
-		state->message_char = set_bit(state->message_char, state->n_bits_received);
-	state->n_bits_received++;
-	if (state->n_bits_received == 8)
-	{
-		add_message_char(state);
-		if (state->message_char == '\0')
+		add_char_to_message(state);
+		if (is_final_char(state))
 		{
 			printf("%s\n", state->message);
-			state->message[0] = '\0';
-			state->message_len = 0;
+			reset_message(state);
 		}
-		state->message_char = 0;
-		state->n_bits_received = 0;
+		reset_message_char(state);
 	}
 	if (usleep(100) == -1)
-		printf("Error sleeping.\n");
+		printf("\nError sleeping");
 	if (!send_acknowledge(siginfo->si_pid))
-		printf("\nError sending acknoledge to client. Client is blocked now.\n");
+		printf("\nError sending acknowledge to client");
 }
 
-void	show_server_pid(void)
+void	show_process_pid(void)
 {
-	printf("Server PID: %d\n", getpid());
+	printf("\nProcess PID: %d\n", getpid());
 }
 
 void	setup_user_signal_handler(void)
@@ -156,9 +213,9 @@ void	handle_signals(void)
 
 int	main(void)
 {	
-	show_server_pid();
+	show_process_pid();
 	setup_user_signal_handler();
 	handle_signals();
-	printf("Server finished successfully.\n");
+	printf("\nServer finished successfully");
 	return (0);
 }
