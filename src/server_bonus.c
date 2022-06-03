@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/03 19:57:11 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/03 20:12:48 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,15 @@ void	on_user_signal_action_received(
 		printf("\nError sending acknowledge to client");
 }
 
+void	on_cleanup_signal_action_received(
+	int signum, siginfo_t *siginfo, void *ucontext
+)
+{
+	printf("\nServer finished successfully");
+	// free memory
+	exit(0);
+}
+
 void	show_process_pid(void)
 {
 	printf("\nProcess PID: %d\n", getpid());
@@ -205,6 +214,16 @@ void	setup_user_signal_handler(void)
 	sigaction(SIGUSR2, &user_signal_action, NULL);
 }
 
+void	setup_cleanup_signal_handler(void)
+{
+	struct sigaction	user_signal_action;
+
+	user_signal_action.sa_sigaction = on_cleanup_signal_action_received;
+	sigemptyset(&user_signal_action.sa_mask);
+	user_signal_action.sa_flags = SA_SIGINFO;
+	sigaction(SIGINT, &user_signal_action, NULL);
+}
+
 void	handle_signals(void)
 {
 	while (pause() == PAUSE_SUCCESS)
@@ -215,7 +234,7 @@ int	main(void)
 {	
 	show_process_pid();
 	setup_user_signal_handler();
+	setup_cleanup_signal_handler();
 	handle_signals();
-	printf("\nServer finished successfully");
 	return (0);
 }
