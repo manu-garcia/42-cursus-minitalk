@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: manu <manu@student.42.fr>                  +#+  +:+       +#+         #
+#    By: manugarc <manugarc@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 20:21:02 by manu              #+#    #+#              #
-#    Updated: 2022/06/01 20:15:26 by manu             ###   ########.fr        #
+#    Updated: 2022/06/04 18:53:18 by manugarc         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ INCLUDES_DIR		= 	includes
 
 CLIENT_SRC			= 	$(SRC_DIR)/client.c
 SERVER_SRC			= 	$(SRC_DIR)/server.c
-CLIENT_BONUS_SRC	= 	$(SRC_DIR)/client_bonus.c
-SERVER_BONUS_SRC	= 	$(SRC_DIR)/server_bonus.c
+CLIENT_BONUS_SRC	= 	$(SRC_DIR)/client_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/bit.c $(SRC_DIR)/message.c
+SERVER_BONUS_SRC	= 	$(SRC_DIR)/server_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/state.c $(SRC_DIR)/error.c $(SRC_DIR)/bit.c
 
 CLIENT_OBJ			= 	$(CLIENT_SRC:.c=.o)
 SERVER_OBJ			= 	$(SERVER_SRC:.c=.o)
@@ -32,7 +32,7 @@ CFLAGS 				= 	-Wall -Wextra -Werror
 CC 					= 	gcc
 
 all: $(NAME) $(NAME_SERVER)
-		
+
 $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $(CFLAGS) -I ${INCLUDES_DIR} -o $@ $^
 
