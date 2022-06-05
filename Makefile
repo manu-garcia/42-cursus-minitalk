@@ -6,7 +6,7 @@
 #    By: manu <manu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 20:21:02 by manu              #+#    #+#              #
-#    Updated: 2022/06/05 22:10:06 by manu             ###   ########.fr        #
+#    Updated: 2022/06/05 23:01:26 by manu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SERVER_OBJ			= 	$(SERVER_SRC:.c=.o)
 CLIENT_BONUS_OBJ	= 	$(CLIENT_BONUS_SRC:.c=.o)
 SERVER_BONUS_OBJ	= 	$(SERVER_BONUS_SRC:.c=.o)
 
+LIB_FT_PRINTF		=	ft_printf
 CFLAGS 				= 	-Wall -Wextra -Werror
 CC 					= 	gcc
 
@@ -37,16 +38,24 @@ $(SRC_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c $(CFLAGS) -I ${INCLUDES_DIR} -o $@ $^
 
 $(NAME): $(CLIENT_OBJ)
-	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(CLIENT_OBJ) -o $(NAME)
+	@make -C $(LIB_FT_PRINTF)
+	@cp $(LIB_FT_PRINTF)/libftprintf.a .
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(CLIENT_OBJ) libftprintf.a -o $(NAME)
 
 $(NAME_SERVER): $(SERVER_OBJ)
-	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(SERVER_OBJ) -o $(NAME_SERVER)
+	@make -C $(LIB_FT_PRINTF)
+	@cp $(LIB_FT_PRINTF)/libftprintf.a .
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(SERVER_OBJ) libftprintf.a  -o $(NAME_SERVER)
 
 $(NAME_BONUS): $(CLIENT_BONUS_SRC)
-	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(CLIENT_BONUS_SRC) -o $(NAME_BONUS)
+	@make -C $(LIB_FT_PRINTF)
+	@cp $(LIB_FT_PRINTF)/libftprintf.a .
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(CLIENT_BONUS_SRC) libftprintf.a  -o $(NAME_BONUS)
 
 $(NAME_BONUS_SERVER): $(SERVER_BONUS_OBJ)
-	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(SERVER_BONUS_OBJ) -o $(NAME_BONUS_SERVER)
+	@make -C $(LIB_FT_PRINTF)
+	@cp $(LIB_FT_PRINTF)/libftprintf.a .
+	@$(CC) $(CFLAGS) -I ${INCLUDES_DIR} $(SERVER_BONUS_OBJ) libftprintf.a  -o $(NAME_BONUS_SERVER)
 
 bonus: $(NAME_BONUS) $(NAME_BONUS_SERVER)
 
@@ -57,6 +66,9 @@ clean:
 	rm -f $(SERVER_OBJ)
 	rm -f $(CLIENT_BONUS_OBJ)
 	rm -f $(SERVER_BONUS_OBJ)
+	rm ./libftprintf.a
+	@make fclean -C $(LIB_FT_PRINTF)
+
 
 fclean: clean
 	rm -f $(NAME)

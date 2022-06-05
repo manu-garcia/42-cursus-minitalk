@@ -6,14 +6,11 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:14 by manu              #+#    #+#             */
-/*   Updated: 2022/05/23 20:54:05 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:06:28 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-
 int	main(void)
 {
-	printf("Mandatory server running\n");
 	return (0);
 }

@@ -6,29 +6,29 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 18:34:18 by manugarc          #+#    #+#             */
-/*   Updated: 2022/06/05 21:57:46 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:05:51 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <errno.h>	// errno
-#include <stdio.h>	// printf
 #include <unistd.h>	// pause usleep getpid
 
 #include "bit.h"
 #include "signals.h"
 #include "error.h"
+#include "ft_printf.h"
 
 static int	send_user_signal(int process_pid, t_signal signal)
 {
 	if (kill(process_pid, signal) == -1)
 	{
-		printf("\nError sending signal. Errno: %d", errno);
+		ft_printf("\nError sending signal. Errno: %d", errno);
 		return (1);
 	}
 	if (pause() != PAUSE_SUCCESS)
-		printf("\nError in pause");
+		ft_printf("\nError in pause");
 	if (usleep(100) == -1)
-		printf("\nError sleeping");
+		ft_printf("\nError sleeping");
 	return (0);
 }
 
@@ -51,7 +51,7 @@ void	send_message_string(int process_id, char *str)
 {
 	if (!str)
 	{
-		printf("\nNothing to be sent");
+		ft_printf("\nNothing to be sent");
 		return ;
 	}
 	while (*str)
@@ -66,12 +66,12 @@ int	send_acknowledge(int process_id)
 {
 	if (!process_id)
 	{
-		printf("\nInvalid process id sending acknowledge");
+		ft_printf("\nInvalid process id sending acknowledge");
 		return (0);
 	}
 	if (kill(process_id, SIGNAL_ACKNOWLEDGE) == -1)
 	{
-		printf("\nError sending ack. Errno: %d", errno);
+		ft_printf("\nError sending ack. Errno: %d", errno);
 		return (0);
 	}
 	return (1);

@@ -6,11 +6,10 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/05 22:22:52 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:06:21 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>	// printf
 #include <stdlib.h>	// atoi exit
 #include <unistd.h>	// pause usleep getpid
 #include <errno.h>	// errno
@@ -22,6 +21,7 @@
 #include "state.h"
 #include "state_char.h"
 #include "state_message.h"
+#include "ft_printf.h"
 
 static void	handle_signals(void)
 {
@@ -33,10 +33,10 @@ static void	on_cleanup_signal_action_received(int signum)
 {
 	if (signum == SIGINT)
 	{
-		printf("\nMemory clean-up");
+		ft_printf("\nMemory clean-up");
 		free_state_memory();
 	}
-	printf("\nServer finished successfully");
+	ft_printf("\nServer finished successfully\n");
 	exit(0);
 }
 
@@ -56,15 +56,15 @@ static void	on_user_signal_action_received(
 		add_char_to_message(state);
 		if (is_final_char(state))
 		{
-			printf("%s\n", state->message);
+			ft_printf("%s\n", state->message);
 			reset_message(state);
 		}
 		reset_message_char(state);
 	}
 	if (usleep(100) == -1)
-		printf("\nError sleeping");
+		ft_printf("\nError sleeping");
 	if (!send_acknowledge(siginfo->si_pid))
-		printf("\nError sending acknowledge to client");
+		ft_printf("\nError sending acknowledge to client");
 }
 
 int	main(void)

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manugarc <manugarc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 16:36:48 by manugarc          #+#    #+#             */
-/*   Updated: 2022/06/04 18:57:05 by manugarc         ###   ########.fr       */
+/*   Updated: 2022/06/05 23:05:30 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>	// malloc
-#include <stdio.h>
 #include "error.h"
+#include "ft_printf.h"
 
 void	exit_with_error_message(char *error_message, int exit_code)
 {
-	printf("\n%s\n", error_message);
+	ft_printf("\n%s\n", error_message);
 	exit(exit_code);
 }
 

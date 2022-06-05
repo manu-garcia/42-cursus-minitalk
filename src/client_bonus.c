@@ -6,11 +6,10 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:32:58 by manu              #+#    #+#             */
-/*   Updated: 2022/06/05 21:58:01 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:04:05 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>	// printf
 #include <stdlib.h>	// atoi exit
 #include <unistd.h>	// pause usleep getpid
 #include <errno.h>	// errno
@@ -19,6 +18,7 @@
 #include "process.h"
 #include "message.h"
 #include "signals.h"
+#include "ft_printf.h"
 
 void	on_acknowledge_signal_action_received(
 	int signum,	siginfo_t *siginfo, void *ucontext
@@ -27,7 +27,7 @@ void	on_acknowledge_signal_action_received(
 	(void)signum;
 	(void)siginfo;
 	(void)ucontext;
-	printf("\nAcknowledge received from server");
+	ft_printf("\nAcknowledge received from server");
 }
 
 int	get_server_pid(char *argv[])
@@ -58,18 +58,18 @@ int	main(int argc, char *argv[])
 	show_process_pid();
 	if (!validate_input_parameters(argc, argv))
 	{
-		printf("\nParameters error. Expected usage:");
-		printf("\nclient_bonus server_pid \"message\"\n");
+		ft_printf("\nParameters error. Expected usage:");
+		ft_printf("\nclient_bonus server_pid \"message\"\n");
 		exit(1);
 	}
 	server_pid = get_server_pid(argv);
 	if (!server_pid)
 	{
-		printf("\nInvalid server process id\n");
+		ft_printf("\nInvalid server process id\n");
 		exit(2);
 	}
 	setup_user_signal_handler(on_acknowledge_signal_action_received);
 	send_message_string(server_pid, argv[2]);
-	printf("\nMessage sent successfully!!!\n");
+	ft_printf("\nMessage sent successfully!!!\n");
 	return (0);
 }
