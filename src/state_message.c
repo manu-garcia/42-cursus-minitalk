@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 16:53:34 by manugarc          #+#    #+#             */
-/*   Updated: 2022/06/05 23:15:28 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:51:49 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "error.h"
 #include "state.h"
 #include "state_char.h"
+#include "ft_memcpy.h"
 
 #define MESSAGE_BUFFER_SIZE	500
 
@@ -35,7 +36,7 @@ void	add_char_to_message(t_state *state)
 		message_aux = state->message;
 		state->message_buffer_size += MESSAGE_BUFFER_SIZE;
 		state->message = (char *) malloc(state->message_buffer_size);
-		strncpy(state->message, message_aux, state->message_len);
+		ft_memcpy(state->message, message_aux, state->message_len);
 		free(message_aux);
 	}
 	state->message[state->message_len] = state->message_char;

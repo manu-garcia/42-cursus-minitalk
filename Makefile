@@ -6,7 +6,7 @@
 #    By: manu <manu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 20:21:02 by manu              #+#    #+#              #
-#    Updated: 2022/06/05 23:17:33 by manu             ###   ########.fr        #
+#    Updated: 2022/06/05 23:49:08 by manu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ INCLUDES_DIR		= 	includes
 
 CLIENT_SRC			= 	$(SRC_DIR)/client.c
 SERVER_SRC			= 	$(SRC_DIR)/server.c
-CLIENT_BONUS_SRC	= 	$(SRC_DIR)/client_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/bit.c $(SRC_DIR)/ft_atoi.c
-SERVER_BONUS_SRC	= 	$(SRC_DIR)/server_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/state.c $(SRC_DIR)/state_message.c $(SRC_DIR)/state_char.c $(SRC_DIR)/error.c $(SRC_DIR)/bit.c
+CLIENT_BONUS_SRC	= 	$(SRC_DIR)/client_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/bit.c $(SRC_DIR)/ft_atoi.c $(SRC_DIR)/ft_memcpy.c
+SERVER_BONUS_SRC	= 	$(SRC_DIR)/server_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/state.c $(SRC_DIR)/state_message.c $(SRC_DIR)/state_char.c $(SRC_DIR)/error.c $(SRC_DIR)/bit.c $(SRC_DIR)/ft_memcpy.c
 
 CLIENT_OBJ			= 	$(CLIENT_SRC:.c=.o)
 SERVER_OBJ			= 	$(SERVER_SRC:.c=.o)
