@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   message.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manugarc <manugarc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 18:34:18 by manugarc          #+#    #+#             */
-/*   Updated: 2022/06/04 18:42:17 by manugarc         ###   ########.fr       */
+/*   Updated: 2022/06/05 21:57:46 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <unistd.h>	// pause usleep getpid
 
 #include "bit.h"
-#include "communication.h"
 #include "signals.h"
 #include "error.h"
 
@@ -61,4 +60,19 @@ void	send_message_string(int process_id, char *str)
 		str++;
 	}
 	send_char(process_id, FINAL_MESSAGE_CHAR);
+}
+
+int	send_acknowledge(int process_id)
+{
+	if (!process_id)
+	{
+		printf("\nInvalid process id sending acknowledge");
+		return (0);
+	}
+	if (kill(process_id, SIGNAL_ACKNOWLEDGE) == -1)
+	{
+		printf("\nError sending ack. Errno: %d", errno);
+		return (0);
+	}
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manugarc <manugarc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:32:58 by manu              #+#    #+#             */
-/*   Updated: 2022/06/04 18:55:47 by manugarc         ###   ########.fr       */
+/*   Updated: 2022/06/05 21:58:01 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include <stdlib.h>	// atoi exit
 #include <unistd.h>	// pause usleep getpid
 #include <errno.h>	// errno
-#include "communication.h"
 #include "error.h"
 #include "bit.h"
 #include "process.h"
 #include "message.h"
+#include "signals.h"
 
 void	on_acknowledge_signal_action_received(
 	int signum,	siginfo_t *siginfo, void *ucontext
@@ -40,19 +40,6 @@ int	get_server_pid(char *argv[])
 	if (!server_pid)
 		return (0);
 	return (server_pid);
-}
-
-void	setup_acknowledge_signal_handler(void)
-{
-	struct sigaction	signal_action;
-
-	signal_action.sa_sigaction = on_acknowledge_signal_action_received;
-	signal_action.sa_flags = SA_SIGINFO;
-	sigemptyset(&signal_action.sa_mask);
-	sigaddset(&signal_action.sa_mask, SIGUSR1);
-	sigaddset(&signal_action.sa_mask, SIGUSR2);
-	sigaction(SIGUSR1, &signal_action, NULL);
-	sigaction(SIGUSR2, &signal_action, NULL);
 }
 
 int	validate_input_parameters(int argc, char *argv[])
@@ -81,7 +68,7 @@ int	main(int argc, char *argv[])
 		printf("\nInvalid server process id\n");
 		exit(2);
 	}
-	setup_acknowledge_signal_handler();
+	setup_user_signal_handler(on_acknowledge_signal_action_received);
 	send_message_string(server_pid, argv[2]);
 	printf("\nMessage sent successfully!!!\n");
 	return (0);

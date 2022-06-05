@@ -3,17 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manugarc <manugarc@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/04 18:57:34 by manugarc         ###   ########.fr       */
+/*   Updated: 2022/06/05 21:55:30 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include <stdio.h>	// printf
+#include <stdlib.h>	// atoi exit
+#include <unistd.h>	// pause usleep getpid
+#include <errno.h>	// errno
+
 #include "error.h"
+#include "message.h"
 #include "process.h"
 #include "signals.h"
+#include "state.h"
 
 void	handle_signals(void)
 {
@@ -21,11 +27,49 @@ void	handle_signals(void)
 		;
 }
 
+void	on_cleanup_signal_action_received(int signum)
+{
+	if (signum == SIGINT)
+	{
+		printf("\nMemory clean-up");
+		free_state_memory();
+	}
+	printf("\nServer finished successfully");
+	exit(0);
+}
+
+void	on_user_signal_action_received(
+	int signum, siginfo_t *siginfo, void *ucontext
+)
+{
+	t_state	*state;
+
+	(void)ucontext;
+	state = get_state();
+	if (!state)
+		exit_with_internal_error();
+	set_bit_to_char(state, signum);
+	if (is_char_completed(state))
+	{
+		add_char_to_message(state);
+		if (is_final_char(state))
+		{
+			printf("%s\n", state->message);
+			reset_message(state);
+		}
+		reset_message_char(state);
+	}
+	if (usleep(100) == -1)
+		printf("\nError sleeping");
+	if (!send_acknowledge(siginfo->si_pid))
+		printf("\nError sending acknowledge to client");
+}
+
 int	main(void)
 {
 	show_process_pid();
-	setup_user_signal_handler();
-	setup_cleanup_signal_handler();
+	setup_user_signal_handler(on_user_signal_action_received);
+	setup_cleanup_signal_handler(on_cleanup_signal_action_received);
 	handle_signals();
 	return (0);
 }
