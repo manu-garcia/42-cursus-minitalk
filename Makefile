@@ -6,7 +6,7 @@
 #    By: manu <manu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 20:21:02 by manu              #+#    #+#              #
-#    Updated: 2022/06/06 00:06:01 by manu             ###   ########.fr        #
+#    Updated: 2022/06/06 00:12:24 by manu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,9 @@ NAME_BONUS_SERVER	=	server_bonus
 SRC_DIR				=	src
 INCLUDES_DIR		= 	includes
 
-CLIENT_SRC			= 	$(SRC_DIR)/client.c
-SERVER_SRC			= 	$(SRC_DIR)/server.c
+CLIENT_SRC			= 	$(SRC_DIR)/client.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/bit.c $(SRC_DIR)/ft_atoi.c $(SRC_DIR)/ft_memory.c
+SERVER_SRC			= 	$(SRC_DIR)/server.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/state.c $(SRC_DIR)/state_message.c $(SRC_DIR)/state_char.c $(SRC_DIR)/error.c $(SRC_DIR)/bit.c $(SRC_DIR)/ft_memory.c
+
 CLIENT_BONUS_SRC	= 	$(SRC_DIR)/client_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/bit.c $(SRC_DIR)/ft_atoi.c $(SRC_DIR)/ft_memory.c
 SERVER_BONUS_SRC	= 	$(SRC_DIR)/server_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/state.c $(SRC_DIR)/state_message.c $(SRC_DIR)/state_char.c $(SRC_DIR)/error.c $(SRC_DIR)/bit.c $(SRC_DIR)/ft_memory.c
 
