@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 16:53:34 by manugarc          #+#    #+#             */
-/*   Updated: 2022/06/05 23:51:49 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/06 00:06:52 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "error.h"
 #include "state.h"
 #include "state_char.h"
-#include "ft_memcpy.h"
+#include "ft_memory.h"
 
 #define MESSAGE_BUFFER_SIZE	500
 

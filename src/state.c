@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 16:53:34 by manugarc          #+#    #+#             */
-/*   Updated: 2022/06/05 23:15:32 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/06 00:06:28 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <string.h>	// memset
 #include "error.h"
 #include "state.h"
+#include "ft_memory.h"
 
 static t_state	*g_state;
 
@@ -24,7 +25,7 @@ t_state	*get_state(void)
 		g_state = (t_state *) malloc(sizeof(t_state));
 		if (!g_state)
 			exit_with_memory_error();
-		memset(g_state, 0, sizeof(t_state));
+		ft_memset(g_state, 0, sizeof(t_state));
 	}
 	return (g_state);
 }
