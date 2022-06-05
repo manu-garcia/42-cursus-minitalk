@@ -6,11 +6,11 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/05 23:06:21 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:15:23 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>	// atoi exit
+#include <stdlib.h>	// exit
 #include <unistd.h>	// pause usleep getpid
 #include <errno.h>	// errno
 

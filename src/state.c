@@ -6,11 +6,11 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/04 16:53:34 by manugarc          #+#    #+#             */
-/*   Updated: 2022/06/05 22:13:53 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:15:32 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>	// atoi exit malloc
+#include <stdlib.h>	// exit malloc
 #include <string.h>	// memset
 #include "error.h"
 #include "state.h"

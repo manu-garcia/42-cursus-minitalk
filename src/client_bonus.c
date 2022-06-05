@@ -6,11 +6,11 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:32:58 by manu              #+#    #+#             */
-/*   Updated: 2022/06/05 23:04:05 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 23:16:52 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>	// atoi exit
+#include <stdlib.h>	// exit
 #include <unistd.h>	// pause usleep getpid
 #include <errno.h>	// errno
 #include "error.h"
@@ -19,6 +19,7 @@
 #include "message.h"
 #include "signals.h"
 #include "ft_printf.h"
+#include "ft_atoi.h"
 
 void	on_acknowledge_signal_action_received(
 	int signum,	siginfo_t *siginfo, void *ucontext
@@ -36,7 +37,7 @@ int	get_server_pid(char *argv[])
 
 	if (!argv || !argv[1])
 		return (0);
-	server_pid = atoi(argv[1]);
+	server_pid = ft_atoi(argv[1]);
 	if (!server_pid)
 		return (0);
 	return (server_pid);
