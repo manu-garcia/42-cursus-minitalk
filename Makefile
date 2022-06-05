@@ -6,7 +6,7 @@
 #    By: manu <manu@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 20:21:02 by manu              #+#    #+#              #
-#    Updated: 2022/06/05 21:56:07 by manu             ###   ########.fr        #
+#    Updated: 2022/06/05 22:10:06 by manu             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ INCLUDES_DIR		= 	includes
 CLIENT_SRC			= 	$(SRC_DIR)/client.c
 SERVER_SRC			= 	$(SRC_DIR)/server.c
 CLIENT_BONUS_SRC	= 	$(SRC_DIR)/client_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/bit.c
-SERVER_BONUS_SRC	= 	$(SRC_DIR)/server_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/state.c $(SRC_DIR)/error.c $(SRC_DIR)/bit.c
+SERVER_BONUS_SRC	= 	$(SRC_DIR)/server_bonus.c $(SRC_DIR)/process.c $(SRC_DIR)/signals.c $(SRC_DIR)/message.c $(SRC_DIR)/state.c $(SRC_DIR)/state_message.c $(SRC_DIR)/state_char.c $(SRC_DIR)/error.c $(SRC_DIR)/bit.c
 
 CLIENT_OBJ			= 	$(CLIENT_SRC:.c=.o)
 SERVER_OBJ			= 	$(SERVER_SRC:.c=.o)

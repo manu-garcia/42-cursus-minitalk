@@ -6,7 +6,7 @@
 /*   By: manu <manu@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/23 20:33:06 by manu              #+#    #+#             */
-/*   Updated: 2022/06/05 21:55:30 by manu             ###   ########.fr       */
+/*   Updated: 2022/06/05 22:22:52 by manu             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,16 @@
 #include "process.h"
 #include "signals.h"
 #include "state.h"
+#include "state_char.h"
+#include "state_message.h"
 
-void	handle_signals(void)
+static void	handle_signals(void)
 {
 	while (pause() == PAUSE_SUCCESS)
 		;
 }
 
-void	on_cleanup_signal_action_received(int signum)
+static void	on_cleanup_signal_action_received(int signum)
 {
 	if (signum == SIGINT)
 	{
@@ -38,7 +40,7 @@ void	on_cleanup_signal_action_received(int signum)
 	exit(0);
 }
 
-void	on_user_signal_action_received(
+static void	on_user_signal_action_received(
 	int signum, siginfo_t *siginfo, void *ucontext
 )
 {
